@@ -17,17 +17,12 @@ exports.load = function(req, res, next, quizId){
 
 
 
-// GET /quizes
-exports.index = function(req, res){
-	models.Quiz.findAll().then(function(quizes){
-		res.render('quizes/index.ejs', {quizes: quizes});
-	}
-	).catch( function(error){ next(error); })
-};
+
 
 
 // GET /quizes/:id
 exports.show = function(req, res){
+	console.log("ENUNCIAT PREGUNTA");
 	res.render("quizes/show", {quiz: req.quiz})
 
 	//models.Quiz.find(req.params.quizId).then(function(quiz){
@@ -60,4 +55,24 @@ exports.answer = function (req, res){
 	});
 	*/
 
+};
+
+
+// GET /quizes
+exports.index = function(req, res){
+	console.log("LLISTAT PREGUNTES");
+
+	var strBusqueda = (req.query.search || null);
+	console.log("strBusqueda: " + strBusqueda);
+	if (strBusqueda === null){
+		strBusqueda = "%";
+	}else{
+		strBusqueda ="%" + strBusqueda.replace(/ /g, '%') + "%";
+	}
+	console.log("strBusqueda: " + strBusqueda);
+	
+	models.Quiz.findAll({where: ["pregunta like ?", strBusqueda]}).then(function(quizes){
+		res.render('quizes/index.ejs', {quizes: quizes});
+	}
+	).catch( function(error){ next(error); });
 };
