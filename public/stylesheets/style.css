@@ -47,3 +47,8 @@ nav span {
 	color: #f61;
 	font-size: smaller
 }
+
+table {
+	border: 1px 1px 1px 1px;
+	border-collapse: 0px;
+}
