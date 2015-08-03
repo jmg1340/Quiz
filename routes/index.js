@@ -22,5 +22,7 @@ router.get('/quizes/:quizId(\\d+)'			, quizController.show);		// formulari pregu
 router.get('/quizes/:quizId(\\d+)/answer'	, quizController.answer);	// resposta de la pregunta
 router.get('/quizes/new'					, quizController.new);		// formulari nova pregunta
 router.post('/quizes/create'				, quizController.create);	// creacio pregunta
+router.get('/quizes/:quizId(\\d+)/edit'		, quizController.edit);		
+router.put('/quizes/:quizId(\\d+)'			, quizController.update);
 
 module.exports = router;

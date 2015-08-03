@@ -18,7 +18,7 @@ exports.load = function(req, res, next, quizId){
 
 // GET /quizes
 exports.index = function(req, res){
-	console.log("LLISTAT PREGUNTES");
+	//console.log("LLISTAT PREGUNTES");
 
 	var strBusqueda = (req.query.search || null);
 	console.log("strBusqueda: " + strBusqueda);
@@ -140,3 +140,38 @@ exports.create = function(req, res){
 
 	
 };
+
+
+
+// GET quizes/:id/edit
+exports.edit = function(req, res){
+	var quiz = req.quiz;	// autoload de instancia de quiz
+
+	res.render('quizes/edit', {quiz: quiz, errors:[]});
+}
+
+
+
+// GET quizes/:id
+exports.update = function(req, res){
+	req.quiz.pregunta  = req.body.quiz.pregunta;
+	req.quiz.respuesta = req.body.quiz.respuesta;
+	
+	console.log("EXPORTS.UPDATE");
+	console.log("req.quiz.pregunta:\t\t" + req.quiz.pregunta);
+
+	var errors = req.quiz.validate();//ya qe el objeto errors no tiene then(
+	if (errors)
+	{
+		var i=0; 
+		var errores=new Array();//se convierte en [] con la propiedad message por compatibilida con layout
+		for (var prop in errors) errores[i++]={message: errors[prop]};
+		res.render('quizes/edit', {quiz: req.quiz, errors: errores});
+	} else {
+		req.quiz // save: guarda en DB campos pregunta y respuesta de quiz
+		.save({fields: ["pregunta", "respuesta"]})
+		.then( function(){ res.redirect('/quizes');}) ;	//redireccion a la lista de preguntas
+	}
+
+
+}
