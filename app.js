@@ -44,6 +44,60 @@ app.use(function(req, res, next){
 });
 
 
+// exercici modul 9
+app.use(function(req, res, next){
+
+    console.log("****************\nEXERCICI MODUL 9\n****************");
+    
+    if (req.session.user){
+        console.log("DINS la sessio");
+        
+        console.log(req.session.datahora || null);
+        if (req.session.datahora){
+            console.log("existeix req.session.datahora: " + req.session.datahora);
+        
+            req.session.datahoraActual = new Date();
+            
+            console.log("Date.now(): " + Date.now());
+            console.log("req.session.datahora: " + req.session.datahora);
+
+            var resultat = Math.floor((Date.now() - req.session.datahora)/1000);
+            console.log("DIFERENCIA segons: " + resultat);
+            if( resultat  >= 30 ){
+                console.log("MES de 30s !!!!");
+                //res.redirect("/logout");
+                delete req.session.user;
+            } else{
+                console.log("MENYS de 30s")
+            }
+
+        } else {
+            console.log("NO EXISTEIX req.session.datahora");
+        }
+
+
+
+        req.session.datahora = Date.now();
+
+        /*
+        console.log("req.session.datahora: " + req.session.datahora);
+        console.log("new Date(): " + new Date().toString());
+        
+        */
+    } else {
+        console.log("FORA de la sessio");
+        req.session.datahora = null;
+    }
+    //req.session.datahora = (new Date() || null);
+    //console.log("req.session.datahora: " + req.session.datahora);
+
+    next();
+});
+
+
+
+
+
 app.use('/', routes);
 
 // catch 404 and forward to error handler
